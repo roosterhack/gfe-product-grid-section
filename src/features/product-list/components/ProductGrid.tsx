@@ -8,12 +8,24 @@ export const ProductGrid = () => {
     })
 
   if (isLoading) {
-    return <div className="text-center text-gray-500">Loading products...</div>
+    return (
+      <div 
+        className="text-center text-gray-500" 
+        role="status" 
+        aria-live="polite"
+      >
+        Loading products...
+      </div>
+    )
   }
 
   if (error) {
     return (
-      <div className="text-center text-red-500">
+      <div 
+        className="text-center text-red-500"
+        role="alert"
+        aria-live="assertive"
+      >
         Error loading products: {String(error)}
       </div>
     )
@@ -21,12 +33,13 @@ export const ProductGrid = () => {
 
   return (
     <>
-      <div className="flex justify-between mb-8 items-center">
-        <div className="text-2xl font-semibold">Latest Arrivals</div>
+      <header className="flex justify-between mb-8 items-center">
+        <h1 className="text-2xl font-semibold">Latest Arrivals</h1>
         <button
           onClick={() => loadMore()}
           disabled={!hasMore || isLoadingMore}
-          className="py-2.5 px-4 shadow-2xs rounded-sm cursor-pointer hover:bg-neutral-50 border-neutral-200 border disabled:opacity-50 disabled:cursor-not-allowed"
+          className="py-2.5 px-4 shadow-2xs rounded-sm cursor-pointer hover:bg-neutral-50 border-neutral-200 border disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          aria-describedby={isLoadingMore ? 'loading-status' : undefined}
         >
           {isLoadingMore
             ? 'Loading...'
@@ -34,12 +47,26 @@ export const ProductGrid = () => {
             ? 'View more'
             : 'No more products'}
         </button>
-      </div>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5">
+        {isLoadingMore && (
+          <div 
+            id="loading-status" 
+            className="sr-only" 
+            aria-live="polite" 
+            role="status"
+          >
+            Loading more products
+          </div>
+        )}
+      </header>
+      <section 
+        className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5"
+        aria-label="Product listing"
+        role="region"
+      >
         {products?.map((product) => (
           <ProductCard key={product.product_id} product={product} />
         ))}
-      </div>
+      </section>
     </>
   )
 }
