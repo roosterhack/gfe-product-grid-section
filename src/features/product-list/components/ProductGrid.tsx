@@ -18,7 +18,7 @@ export const ProductGrid = () => {
       </div>
     )
   }
-  console.log('Products:', products)
+
   return (
     <>
       <div className="flex justify-between mb-8 items-center">
